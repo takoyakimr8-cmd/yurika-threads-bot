@@ -1,2 +1,216 @@
+"""
+ゆりか Threads 半自動投稿ワーカー（ローカル実行版）
 
-echo 'IiIiCuOChuOCiuOBiyBUaHJlYWRzIOWNiuiHquWLleaKleeov+ODr+ODvOOCq+ODvO+8iOODreODvOOCq+ODq+Wun+ihjOeJiO+8iQoK44GT44Gu44K544Kv44Oq44OX44OI44GvIGxhdW5jaGQg44GL44KJMTXliIbjgZTjgajjgavlkbzjgbPlh7rjgZXjgozjgovjgZPjgajjgpLmg7PlrprjgZfjgabjgYTjgb7jgZnjgIIKCuOChOOCi+OBk+OBqO+8mgoxLiBzdGF0dXM9J3F1ZXVlZCcg44Gu5oqV56i/44KS56K66KqN44GX44CB6YeN6KSH44OB44Kn44OD44KvIOKGkiAncGVuZGluZyfvvIgxMuaZgumWk+W+jOOBq+aKleeov+S6iOWumu+8iQogICDjgb7jgZ/jga8gJ2R1cGxpY2F0ZSfvvIjph43opIfjga7jgZ/jgoHmipXnqL/jgZfjgarjgYTvvInjgavmjK/jgorliIbjgZHjgosKMi4g44CM5LuK5pel44G+44GgM+S7tuaKleeov+OBl+OBpuOBquOBhOOAjeOBi+OBpOOAjOWJjeWbnuaKleeov+OBi+OCiTPmmYLplpPku6XkuIrntYzjgaPjgabjgovjgI3loLTlkIjjgIEKICAgc2NoZWR1bGVkQXQg44KS6YGO44GO44GfIHBlbmRpbmcg5oqV56i/44Gu44GG44Gh5LiA55Wq5Y+k44GE44KC44Gu44KSMeS7tuOBoOOBkeaKleeov+OBmeOCiwogICDvvIhNYWPjgYznibnlrprjga7mmYLliLvjgavplovjgYTjgabjgarjgY/jgabjgoLjgIHmrKHjgavplovjgYTjgZ/mmYLjgavoh6rnhLbjgavov73jgYTjgaTjgY/oqK3oqIjvvIkKIiIiCgppbXBvcnQgb3MKaW1wb3J0IHJlCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lLCB0aW1lZGVsdGEsIHRpbWV6b25lCgppbXBvcnQgZmlyZWJhc2VfYWRtaW4KaW1wb3J0IHJlcXVlc3RzCmZyb20gZmlyZWJhc2VfYWRtaW4gaW1wb3J0IGNyZWRlbnRpYWxzLCBmaXJlc3RvcmUKCiMgPT09PSDoqK3lrpogPT09PQpTRVJWSUNFX0FDQ09VTlRfUEFUSCA9IG9zLnBhdGguam9pbigKICAgIG9zLnBhdGguZGlybmFtZShfX2ZpbGVfXyksICJzZXJ2aWNlQWNjb3VudEtleS5qc29uIgopClBPU1RTX0NPTExFQ1RJT04gPSAieXVyaWthX3Bvc3RzIgpIT0xEX0hPVVJTID0gMTIgICMg44Kt44Oj44Oz44K744Or54y25LqI5pmC6ZaTCk1BWF9QT1NUU19QRVJfREFZID0gMyAgIyAx5pel44Gu5oqV56i/5LiK6ZmQCk1JTl9HQVBfSE9VUlMgPSAzICAjIOaKleeov+OBqOaKleeov+OBruacgOS9jumWk+malO+8iOmAo+aKleOCkumYsuOBkO+8iQpUSFJFQURTX01BWF9MRU5HVEggPSA1MDAgICMgVGhyZWFkc+OBruODhuOCreOCueODiOaKleeov+OBruaWh+Wtl+aVsOS4iumZkAoKSlNUID0gdGltZXpvbmUodGltZWRlbHRhKGhvdXJzPTkpKQoKVEhSRUFEU19BQ0NFU1NfVE9LRU4gPSBvcy5lbnZpcm9uLmdldCgiVEhSRUFEU19BQ0NFU1NfVE9LRU4iKQpUSFJFQURTX1VTRVJfSUQgPSBvcy5lbnZpcm9uLmdldCgiVEhSRUFEU19VU0VSX0lEIikKCgpkZWYgbm9ybWFsaXplKHRleHQ6IHN0cikgLT4gc3RyOgogICAgcmV0dXJuIHJlLnN1YihyIlxzKyIsICIiLCB0ZXh0IG9yICIiKS5zdHJpcCgpCgoKZGVmIGNhbl9wb3N0X25vdyhkYiwgbm93X3V0YzogZGF0ZXRpbWUpIC0+IGJvb2w6CiAgICAiIiIKICAgIOS7iuaXpeOBmeOBp+OBq+S9leWbnuaKleeov+OBl+OBn+OBi+OAgeacgOW+jOOBruaKleeov+OBi+OCieOBqeOCjOOBj+OCieOBhOe1jOOBo+OBn+OBi+OCkuimi+OBpuOAgQogICAg44CM5LuK5oqV56i/44GX44Gm44GE44GE44GL44CN44KS5Yik5a6a44GZ44KL44CCCiAgICBNYWPjgYznibnlrprjga7mmYLliLvjgavplovjgYTjgabjgarjgY/jgabjgoLjgIHplovjgYTjgZ/mmYLjgavoh6rnhLbjgavov73jgYTjgaTjgZHjgovoqK3oqIjjgIIKICAgICIiIgogICAgbm93X2pzdCA9IG5vd191dGMuYXN0aW1lem9uZShKU1QpCiAgICB0b2RheV9zdGFydF9qc3QgPSBub3dfanN0LnJlcGxhY2UoaG91cj0wLCBtaW51dGU9MCwgc2Vjb25kPTAsIG1pY3Jvc2Vjb25kPTApCiAgICB0b2RheV9zdGFydF91dGMgPSB0b2RheV9zdGFydF9qc3QuYXN0aW1lem9uZSh0aW1lem9uZS51dGMpCgogICAgcG9zdGVkX3RvZGF5ID0gbGlzdCgKICAgICAgICBkYi5jb2xsZWN0aW9uKFBPU1RTX0NPTExFQ1RJT04pCiAgICAgICAgLndoZXJlKCJzdGF0dXMiLCAiPT0iLCAicG9zdGVkIikKICAgICAgICAud2hlcmUoInBvc3RlZEF0IiwgIj49IiwgdG9kYXlfc3RhcnRfdXRjKQogICAgICAgIC5vcmRlcl9ieSgicG9zdGVkQXQiLCBkaXJlY3Rpb249ZmlyZXN0b3JlLlF1ZXJ5LkRFU0NFTkRJTkcpCiAgICAgICAgLnN0cmVhbSgpCiAgICApCgogICAgaWYgbGVuKHBvc3RlZF90b2RheSkgPj0gTUFYX1BPU1RTX1BFUl9EQVk6CiAgICAgICAgcHJpbnQoZiLmnKzml6Xjga/ml6Ljgat7bGVuKHBvc3RlZF90b2RheSl95Lu25oqV56i/5riI44G/77yI5LiK6ZmQe01BWF9QT1NUU19QRVJfREFZfeS7tu+8iSIpCiAgICAgICAgcmV0dXJuIEZhbHNlCgogICAgaWYgcG9zdGVkX3RvZGF5OgogICAgICAgIGxhc3RfcG9zdGVkX2F0ID0gcG9zdGVkX3RvZGF5WzBdLnRvX2RpY3QoKVsicG9zdGVkQXQiXQogICAgICAgIGVsYXBzZWRfaG91cnMgPSAobm93X3V0YyAtIGxhc3RfcG9zdGVkX2F0KS50b3RhbF9zZWNvbmRzKCkgLyAzNjAwCiAgICAgICAgaWYgZWxhcHNlZF9ob3VycyA8IE1JTl9HQVBfSE9VUlM6CiAgICAgICAgICAgIHByaW50KGYi5YmN5Zue5oqV56i/44GL44KJe2VsYXBzZWRfaG91cnM6LjFmfeaZgumWk+OBl+OBi+e1jOOBo+OBpuOBvuOBm+OCk++8iOacgOS9jntNSU5fR0FQX0hPVVJTfeaZgumWk+epuuOBkeOCi++8iSIpCiAgICAgICAgICAgIHJldHVybiBGYWxzZQoKICAgIHJldHVybiBUcnVlCgoKZGVmIHBvc3RfdG9fdGhyZWFkcyh0ZXh0OiBzdHIpIC0+IHN0cjoKICAgIGJhc2UgPSAiaHR0cHM6Ly9ncmFwaC50aHJlYWRzLm5ldC92MS4wIgoKICAgICMg44K544OG44OD44OXMe+8muaKleeov+OCs+ODs+ODhuODiuOCkuS9nOaIkAogICAgY3JlYXRlX3JlcyA9IHJlcXVlc3RzLmdldCgKICAgICAgICBmIntiYXNlfS97VEhSRUFEU19VU0VSX0lEfS90aHJlYWRzIiwKICAgICAgICBwYXJhbXM9ewogICAgICAgICAgICAibWVkaWFfdHlwZSI6ICJURVhUIiwKICAgICAgICAgICAgInRleHQiOiB0ZXh0LAogICAgICAgICAgICAiYWNjZXNzX3Rva2VuIjogVEhSRUFEU19BQ0NFU1NfVE9LRU4sCiAgICAgICAgfSwKICAgICkKICAgIGNyZWF0ZV9kYXRhID0gY3JlYXRlX3Jlcy5qc29uKCkKICAgIHByaW50KGYiW+S9nOaIkOOCueODhuODg+ODl+OBrueUn+ODrOOCueODneODs+OCuV0gc3RhdHVzPXtjcmVhdGVfcmVzLnN0YXR1c19jb2RlfSBib2R5PXtjcmVhdGVfZGF0YX0iKQoKICAgICMg44Os44K544Od44Oz44K544Gu5b2i44GvIHsgImlkIjogIi4uLiIgfSDjga7loLTlkIjjgagKICAgICMgeyAiZGF0YSI6IFt7ICJpZCI6ICIuLi4iIH1dIH0g44Gu5aC05ZCI44Gu5Lih5pa544GM44GC44KL44Gf44KB44CB5Lih5pa544Gr5a++5b+c44GZ44KLCiAgICBpZiAiaWQiIGluIGNyZWF0ZV9kYXRhOgogICAgICAgIGNyZWF0aW9uX2lkID0gY3JlYXRlX2RhdGFbImlkIl0KICAgIGVsaWYgImRhdGEiIGluIGNyZWF0ZV9kYXRhIGFuZCBjcmVhdGVfZGF0YVsiZGF0YSJdOgogICAgICAgIGNyZWF0aW9uX2lkID0gY3JlYXRlX2RhdGFbImRhdGEiXVswXVsiaWQiXQogICAgZWxzZToKICAgICAgICByYWlzZSBSdW50aW1lRXJyb3IoZiLkvZzmiJDlpLHmlZc6IHN0YXR1cz17Y3JlYXRlX3Jlcy5zdGF0dXNfY29kZX0gYm9keT17Y3JlYXRlX2RhdGF9IikKCiAgICBpZiBub3QgY3JlYXRlX3Jlcy5vazoKICAgICAgICByYWlzZSBSdW50aW1lRXJyb3IoZiLkvZzmiJDlpLHmlZc6IHN0YXR1cz17Y3JlYXRlX3Jlcy5zdGF0dXNfY29kZX0gYm9keT17Y3JlYXRlX2RhdGF9IikKCiAgICAjIOOCueODhuODg+ODlzLvvJrlhazplosKICAgIHB1Ymxpc2hfcmVzID0gcmVxdWVzdHMucG9zdCgKICAgICAgICBmIntiYXNlfS97VEhSRUFEU19VU0VSX0lEfS90aHJlYWRzX3B1Ymxpc2giLAogICAgICAgIHBhcmFtcz17CiAgICAgICAgICAgICJjcmVhdGlvbl9pZCI6IGNyZWF0aW9uX2lkLAogICAgICAgICAgICAiYWNjZXNzX3Rva2VuIjogVEhSRUFEU19BQ0NFU1NfVE9LRU4sCiAgICAgICAgfSwKICAgICkKICAgIHB1Ymxpc2hfZGF0YSA9IHB1Ymxpc2hfcmVzLmpzb24oKQogICAgcHJpbnQoZiJb5YWs6ZaL44K544OG44OD44OX44Gu55Sf44Os44K544Od44Oz44K5XSBzdGF0dXM9e3B1Ymxpc2hfcmVzLnN0YXR1c19jb2RlfSBib2R5PXtwdWJsaXNoX2RhdGF9IikKCiAgICBpZiAiaWQiIGluIHB1Ymxpc2hfZGF0YToKICAgICAgICByZXR1cm4gcHVibGlzaF9kYXRhWyJpZCJdCiAgICBlbGlmICJkYXRhIiBpbiBwdWJsaXNoX2RhdGEgYW5kIHB1Ymxpc2hfZGF0YVsiZGF0YSJdOgogICAgICAgIHJldHVybiBwdWJsaXNoX2RhdGFbImRhdGEiXVswXVsiaWQiXQogICAgZWxzZToKICAgICAgICByYWlzZSBSdW50aW1lRXJyb3IoZiLlhazplovlpLHmlZc6IHN0YXR1cz17cHVibGlzaF9yZXMuc3RhdHVzX2NvZGV9IGJvZHk9e3B1Ymxpc2hfZGF0YX0iKQoKCmRlZiBtYWluKCk6CiAgICBpZiBub3QgVEhSRUFEU19BQ0NFU1NfVE9LRU4gb3Igbm90IFRIUkVBRFNfVVNFUl9JRDoKICAgICAgICBwcmludCgi55Kw5aKD5aSJ5pWwIFRIUkVBRFNfQUNDRVNTX1RPS0VOIC8gVEhSRUFEU19VU0VSX0lEIOOBjOacquioreWumuOBp+OBmSIpCiAgICAgICAgcmV0dXJuCgogICAgY3JlZCA9IGNyZWRlbnRpYWxzLkNlcnRpZmljYXRlKFNFUlZJQ0VfQUNDT1VOVF9QQVRIKQogICAgaWYgbm90IGZpcmViYXNlX2FkbWluLl9hcHBzOgogICAgICAgIGZpcmViYXNlX2FkbWluLmluaXRpYWxpemVfYXBwKGNyZWQpCiAgICBkYiA9IGZpcmVzdG9yZS5jbGllbnQoKQoKICAgIG5vd191dGMgPSBkYXRldGltZS5ub3codGltZXpvbmUudXRjKQogICAgbm93X2pzdCA9IG5vd191dGMuYXN0aW1lem9uZShKU1QpCgogICAgIyAtLS0tIOKRoCBxdWV1ZWQg44Gu5oqV56i/44KS5oyv44KK5YiG44GR44KLIC0tLS0KICAgIHF1ZXVlZF9kb2NzID0gbGlzdCgKICAgICAgICBkYi5jb2xsZWN0aW9uKFBPU1RTX0NPTExFQ1RJT04pLndoZXJlKCJzdGF0dXMiLCAiPT0iLCAicXVldWVkIikuc3RyZWFtKCkKICAgICkKCiAgICBpZiBxdWV1ZWRfZG9jczoKICAgICAgICBleGlzdGluZ19kb2NzID0gbGlzdCgKICAgICAgICAgICAgZGIuY29sbGVjdGlvbihQT1NUU19DT0xMRUNUSU9OKQogICAgICAgICAgICAud2hlcmUoInN0YXR1cyIsICJpbiIsIFsicGVuZGluZyIsICJwb3N0ZWQiXSkKICAgICAgICAgICAgLnN0cmVhbSgpCiAgICAgICAgKQogICAgICAgIGV4aXN0aW5nX3RleHRzID0ge25vcm1hbGl6ZShkLnRvX2RpY3QoKS5nZXQoInRleHQiLCAiIikpIGZvciBkIGluIGV4aXN0aW5nX2RvY3N9CgogICAgICAgIGZvciBkb2MgaW4gcXVldWVkX2RvY3M6CiAgICAgICAgICAgIGRhdGEgPSBkb2MudG9fZGljdCgpCiAgICAgICAgICAgIG5vcm0gPSBub3JtYWxpemUoZGF0YS5nZXQoInRleHQiLCAiIikpCiAgICAgICAgICAgIGlmIG5vcm0gaW4gZXhpc3RpbmdfdGV4dHM6CiAgICAgICAgICAgICAgICBkb2MucmVmZXJlbmNlLnVwZGF0ZSgKICAgICAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgICJzdGF0dXMiOiAiZHVwbGljYXRlIiwKICAgICAgICAgICAgICAgICAgICAgICAgIm5vdGUiOiAi5ZCM44GY5YaF5a6544Gu5oqV56i/44GM5pei44Gr44GC44KL44Gf44KB44CB6Ieq5YuV5oqV56i/44Gu5a++6LGh5aSW44Gr44GX44G+44GX44GfIiwKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICApCiAgICAgICAgICAgICAgICBwcmludChmIumHjeikh+aKleeov+OCkuaknOefpeOAgeOCueOCreODg+ODlzoge2RvYy5pZH0iKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgc2NoZWR1bGVkX2F0ID0gbm93X3V0YyArIHRpbWVkZWx0YShob3Vycz1IT0xEX0hPVVJTKQogICAgICAgICAgICAgICAgZG9jLnJlZmVyZW5jZS51cGRhdGUoCiAgICAgICAgICAgICAgICAgICAgeyJzdGF0dXMiOiAicGVuZGluZyIsICJzY2hlZHVsZWRBdCI6IHNjaGVkdWxlZF9hdH0KICAgICAgICAgICAgICAgICkKICAgICAgICAgICAgICAgIGV4aXN0aW5nX3RleHRzLmFkZChub3JtKQogICAgICAgICAgICAgICAgcHJpbnQoZiLmipXnqL/jgpLkuojntITjgZfjgb7jgZfjgZ/vvIh7SE9MRF9IT1VSU33mmYLplpPlvozvvIk6IHtkb2MuaWR9IikKCiAgICAjIC0tLS0g4pGhIOaKleeov+aeoOOBruOCv+OCpOODn+ODs+OCsOOBquOCieOAgTHku7bjgaDjgZHmipXnqL/jgZnjgosgLS0tLQogICAgaWYgbm90IGNhbl9wb3N0X25vdyhkYiwgbm93X3V0Yyk6CiAgICAgICAgcHJpbnQoZiLku4rlm57jga/mipXnqL/jgpLopovpgIHjgorjgb7jgZnvvIjnj77lnKgge25vd19qc3Quc3RyZnRpbWUoJyVIOiVNJyl9IEpTVO+8iSIpCiAgICAgICAgcmV0dXJuCgogICAgZHVlX2RvY3MgPSAoCiAgICAgICAgZGIuY29sbGVjdGlvbihQT1NUU19DT0xMRUNUSU9OKQogICAgICAgIC53aGVyZSgic3RhdHVzIiwgIj09IiwgInBlbmRpbmciKQogICAgICAgIC53aGVyZSgic2NoZWR1bGVkQXQiLCAiPD0iLCBub3dfdXRjKQogICAgICAgIC5vcmRlcl9ieSgic2NoZWR1bGVkQXQiKQogICAgICAgIC5saW1pdCgxKQogICAgICAgIC5zdHJlYW0oKQogICAgKQogICAgZHVlX2RvY3MgPSBsaXN0KGR1ZV9kb2NzKQoKICAgIGlmIG5vdCBkdWVfZG9jczoKICAgICAgICBwcmludCgi44GT44Gu5p6g44Gr5oqV56i/44Gn44GN44KL5LqI5a6a44Gv44Gq44GXIikKICAgICAgICByZXR1cm4KCiAgICBkb2MgPSBkdWVfZG9jc1swXQogICAgZGF0YSA9IGRvYy50b19kaWN0KCkKICAgIHRleHQgPSBkYXRhWyJ0ZXh0Il0KCiAgICAjIFRocmVhZHPjga7mloflrZfmlbDkuIrpmZDjgpLotoXjgYjjgabjgYTjgZ/jgonjgIHoh6rnhLbjgarkvY3nva7jgafliIfjgoroqbDjgoHjgosKICAgIGlmIGxlbih0ZXh0KSA+IFRIUkVBRFNfTUFYX0xFTkdUSDoKICAgICAgICBvcmlnaW5hbF9sZW5ndGggPSBsZW4odGV4dCkKICAgICAgICB0cnVuY2F0ZWQgPSB0ZXh0WzogVEhSRUFEU19NQVhfTEVOR1RIIC0gMV0KICAgICAgICAjIOaWh+OBruWMuuWIh+OCiu+8iOOAgu+8ieOBp+WIh+OCjOOCi+S9jee9ruOCkuaOouOBl+OAgeOBquOCi+OBueOBj+S4jeiHqueEtuOBq+OBquOCieOBquOBhOOCiOOBhuOBq+OBmeOCiwogICAgICAgIGxhc3RfcGVyaW9kID0gdHJ1bmNhdGVkLnJmaW5kKCLjgIIiKQogICAgICAgIGlmIGxhc3RfcGVyaW9kID4gVEhSRUFEU19NQVhfTEVOR1RIICogMC41OiAgIyDnn63jgY/jgarjgorjgZnjgY7jgarjgYTnr4Tlm7Ljgafjga7jgb/mjqHnlKgKICAgICAgICAgICAgdHJ1bmNhdGVkID0gdHJ1bmNhdGVkWzogbGFzdF9wZXJpb2QgKyAxXQogICAgICAgIHRleHQgPSB0cnVuY2F0ZWQKICAgICAgICBwcmludChmIuaWh+Wtl+aVsOi2hemBjuOBruOBn+OCgeWIh+OCiuipsOOCgeOBvuOBl+OBnzoge29yaWdpbmFsX2xlbmd0aH3lrZcgLT4ge2xlbih0ZXh0KX3lrZciKQoKICAgIHRyeToKICAgICAgICB0aHJlYWRzX2lkID0gcG9zdF90b190aHJlYWRzKHRleHQpCiAgICAgICAgZG9jLnJlZmVyZW5jZS51cGRhdGUoCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJzdGF0dXMiOiAicG9zdGVkIiwKICAgICAgICAgICAgICAgICJwb3N0ZWRBdCI6IG5vd191dGMsCiAgICAgICAgICAgICAgICAidGhyZWFkc1Bvc3RJZCI6IHRocmVhZHNfaWQsCiAgICAgICAgICAgICAgICAicG9zdGVkVGV4dCI6IHRleHQsICAjIOWun+mam+OBq+aKleeov+OBl+OBn+aWh+eroO+8iOWIh+OCiuipsOOCgeW+jO+8ieOCkuiomOmMsgogICAgICAgICAgICB9CiAgICAgICAgKQogICAgICAgIHByaW50KGYi5oqV56i/5oiQ5YqfOiB7ZG9jLmlkfSAtPiB7dGhyZWFkc19pZH0iKQogICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgICAgIGRvYy5yZWZlcmVuY2UudXBkYXRlKHsic3RhdHVzIjogImZhaWxlZCIsICJlcnJvciI6IHN0cihlKX0pCiAgICAgICAgcHJpbnQoZiLmipXnqL/lpLHmlZc6IHtkb2MuaWR9IC0+IHtlfSIpCgoKaWYgX19uYW1lX18gPT0gIl9fbWFpbl9fIjoKICAgIG1haW4oKQo=' | base64 -d > threads_worker.py
+このスクリプトは launchd から15分ごとに呼び出されることを想定しています。
+
+やること：
+1. status='queued' の投稿を確認し、重複チェック → 'pending'（12時間後に投稿予定）
+   または 'duplicate'（重複のため投稿しない）に振り分ける
+2. 「今日まだ3件投稿してない」かつ「前回投稿から3時間以上経ってる」場合、
+   scheduledAt を過ぎた pending 投稿のうち一番古いものを1件だけ投稿する
+   （Macが特定の時刻に開いてなくても、次に開いた時に自然に追いつく設計）
+"""
+
+import os
+import re
+from datetime import datetime, timedelta, timezone
+
+import firebase_admin
+import requests
+from firebase_admin import credentials, firestore
+
+# ==== 設定 ====
+SERVICE_ACCOUNT_PATH = os.path.join(
+    os.path.dirname(__file__), "serviceAccountKey.json"
+)
+POSTS_COLLECTION = "yurika_posts"
+HOLD_HOURS = 12  # キャンセル猶予時間
+MAX_POSTS_PER_DAY = 3  # 1日の投稿上限
+MIN_GAP_HOURS = 3  # 投稿と投稿の最低間隔（連投を防ぐ）
+THREADS_MAX_LENGTH = 500  # Threadsのテキスト投稿の文字数上限
+
+JST = timezone(timedelta(hours=9))
+
+THREADS_ACCESS_TOKEN = os.environ.get("THREADS_ACCESS_TOKEN")
+THREADS_USER_ID = os.environ.get("THREADS_USER_ID")
+
+
+def normalize(text: str) -> str:
+    return re.sub(r"\s+", "", text or "").strip()
+
+
+def can_post_now(db, now_utc: datetime) -> bool:
+    """
+    今日すでに何回投稿したか、最後の投稿からどれくらい経ったかを見て、
+    「今投稿していいか」を判定する。
+    Macが特定の時刻に開いてなくても、開いた時に自然に追いつける設計。
+    """
+    now_jst = now_utc.astimezone(JST)
+    today_start_jst = now_jst.replace(hour=0, minute=0, second=0, microsecond=0)
+    today_start_utc = today_start_jst.astimezone(timezone.utc)
+
+    posted_today = list(
+        db.collection(POSTS_COLLECTION)
+        .where("status", "==", "posted")
+        .where("postedAt", ">=", today_start_utc)
+        .order_by("postedAt", direction=firestore.Query.DESCENDING)
+        .stream()
+    )
+
+    if len(posted_today) >= MAX_POSTS_PER_DAY:
+        print(f"本日は既に{len(posted_today)}件投稿済み（上限{MAX_POSTS_PER_DAY}件）")
+        return False
+
+    if posted_today:
+        last_posted_at = posted_today[0].to_dict()["postedAt"]
+        elapsed_hours = (now_utc - last_posted_at).total_seconds() / 3600
+        if elapsed_hours < MIN_GAP_HOURS:
+            print(f"前回投稿から{elapsed_hours:.1f}時間しか経ってません（最低{MIN_GAP_HOURS}時間空ける）")
+            return False
+
+    return True
+
+
+def post_to_threads(text: str) -> str:
+    base = "https://graph.threads.net/v1.0"
+
+    # ステップ1：投稿コンテナを作成
+    create_res = requests.get(
+        f"{base}/{THREADS_USER_ID}/threads",
+        params={
+            "media_type": "TEXT",
+            "text": text,
+            "access_token": THREADS_ACCESS_TOKEN,
+        },
+    )
+    create_data = create_res.json()
+    print(f"[作成ステップの生レスポンス] status={create_res.status_code} body={create_data}")
+
+    # レスポンスの形は { "id": "..." } の場合と
+    # { "data": [{ "id": "..." }] } の場合の両方があるため、両方に対応する
+    if "id" in create_data:
+        creation_id = create_data["id"]
+    elif "data" in create_data and create_data["data"]:
+        creation_id = create_data["data"][0]["id"]
+    else:
+        raise RuntimeError(f"作成失敗: status={create_res.status_code} body={create_data}")
+
+    if not create_res.ok:
+        raise RuntimeError(f"作成失敗: status={create_res.status_code} body={create_data}")
+
+    # ステップ2：公開
+    publish_res = requests.post(
+        f"{base}/{THREADS_USER_ID}/threads_publish",
+        params={
+            "creation_id": creation_id,
+            "access_token": THREADS_ACCESS_TOKEN,
+        },
+    )
+    publish_data = publish_res.json()
+    print(f"[公開ステップの生レスポンス] status={publish_res.status_code} body={publish_data}")
+
+    if "id" in publish_data:
+        return publish_data["id"]
+    elif "data" in publish_data and publish_data["data"]:
+        return publish_data["data"][0]["id"]
+    else:
+        raise RuntimeError(f"公開失敗: status={publish_res.status_code} body={publish_data}")
+
+
+def main():
+    if not THREADS_ACCESS_TOKEN or not THREADS_USER_ID:
+        print("環境変数 THREADS_ACCESS_TOKEN / THREADS_USER_ID が未設定です")
+        return
+
+    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
+    if not firebase_admin._apps:
+        firebase_admin.initialize_app(cred)
+    db = firestore.client()
+
+    now_utc = datetime.now(timezone.utc)
+    now_jst = now_utc.astimezone(JST)
+
+    # ---- ① queued の投稿を振り分ける ----
+    queued_docs = list(
+        db.collection(POSTS_COLLECTION).where("status", "==", "queued").stream()
+    )
+
+    if queued_docs:
+        existing_docs = list(
+            db.collection(POSTS_COLLECTION)
+            .where("status", "in", ["pending", "posted"])
+            .stream()
+        )
+        existing_texts = {normalize(d.to_dict().get("text", "")) for d in existing_docs}
+
+        for doc in queued_docs:
+            data = doc.to_dict()
+            norm = normalize(data.get("text", ""))
+            if norm in existing_texts:
+                doc.reference.update(
+                    {
+                        "status": "duplicate",
+                        "note": "同じ内容の投稿が既にあるため、自動投稿の対象外にしました",
+                    }
+                )
+                print(f"重複投稿を検知、スキップ: {doc.id}")
+            else:
+                scheduled_at = now_utc + timedelta(hours=HOLD_HOURS)
+                doc.reference.update(
+                    {"status": "pending", "scheduledAt": scheduled_at}
+                )
+                existing_texts.add(norm)
+                print(f"投稿を予約しました（{HOLD_HOURS}時間後）: {doc.id}")
+
+    # ---- ② 投稿枠のタイミングなら、1件だけ投稿する ----
+    if not can_post_now(db, now_utc):
+        print(f"今回は投稿を見送ります（現在 {now_jst.strftime('%H:%M')} JST）")
+        return
+
+    due_docs = (
+        db.collection(POSTS_COLLECTION)
+        .where("status", "==", "pending")
+        .where("scheduledAt", "<=", now_utc)
+        .order_by("scheduledAt")
+        .limit(1)
+        .stream()
+    )
+    due_docs = list(due_docs)
+
+    if not due_docs:
+        print("この枠に投稿できる予定はなし")
+        return
+
+    doc = due_docs[0]
+    data = doc.to_dict()
+    text = data["text"]
+
+    # Threadsの文字数上限を超えていたら、自然な位置で切り詰める
+    if len(text) > THREADS_MAX_LENGTH:
+        original_length = len(text)
+        truncated = text[: THREADS_MAX_LENGTH - 1]
+        # 文の区切り（。）で切れる位置を探し、なるべく不自然にならないようにする
+        last_period = truncated.rfind("。")
+        if last_period > THREADS_MAX_LENGTH * 0.5:  # 短くなりすぎない範囲でのみ採用
+            truncated = truncated[: last_period + 1]
+        text = truncated
+        print(f"文字数超過のため切り詰めました: {original_length}字 -> {len(text)}字")
+
+    try:
+        threads_id = post_to_threads(text)
+        doc.reference.update(
+            {
+                "status": "posted",
+                "postedAt": now_utc,
+                "threadsPostId": threads_id,
+                "postedText": text,  # 実際に投稿した文章（切り詰め後）を記録
+            }
+        )
+        print(f"投稿成功: {doc.id} -> {threads_id}")
+    except Exception as e:
+        doc.reference.update({"status": "failed", "error": str(e)})
+        print(f"投稿失敗: {doc.id} -> {e}")
+
+
+if __name__ == "__main__":
+    main()
