@@ -27,6 +27,7 @@ POSTS_COLLECTION = "yurika_posts"
 HOLD_HOURS = 12  # キャンセル猶予時間
 MAX_POSTS_PER_DAY = 3  # 1日の投稿上限
 MIN_GAP_HOURS = 3  # 投稿と投稿の最低間隔（連投を防ぐ）
+THREADS_MAX_LENGTH = 500  # Threadsのテキスト投稿の文字数上限
 
 JST = timezone(timedelta(hours=9))
 
@@ -73,6 +74,7 @@ def can_post_now(db, now_utc: datetime) -> bool:
 def post_to_threads(text: str) -> str:
     base = "https://graph.threads.net/v1.0"
 
+    # ステップ1：投稿コンテナを作成
     create_res = requests.get(
         f"{base}/{THREADS_USER_ID}/threads",
         params={
@@ -86,6 +88,7 @@ def post_to_threads(text: str) -> str:
         raise RuntimeError(f"作成失敗: {create_data}")
     creation_id = create_data["id"]
 
+    # ステップ2：公開
     publish_res = requests.post(
         f"{base}/{THREADS_USER_ID}/threads_publish",
         params={
@@ -113,6 +116,7 @@ def main():
     now_utc = datetime.now(timezone.utc)
     now_jst = now_utc.astimezone(JST)
 
+    # ---- ① queued の投稿を振り分ける ----
     queued_docs = list(
         db.collection(POSTS_COLLECTION).where("status", "==", "queued").stream()
     )
@@ -144,6 +148,7 @@ def main():
                 existing_texts.add(norm)
                 print(f"投稿を予約しました（{HOLD_HOURS}時間後）: {doc.id}")
 
+    # ---- ② 投稿枠のタイミングなら、1件だけ投稿する ----
     if not can_post_now(db, now_utc):
         print(f"今回は投稿を見送ります（現在 {now_jst.strftime('%H:%M')} JST）")
         return
@@ -164,13 +169,27 @@ def main():
 
     doc = due_docs[0]
     data = doc.to_dict()
+    text = data["text"]
+
+    # Threadsの文字数上限を超えていたら、自然な位置で切り詰める
+    if len(text) > THREADS_MAX_LENGTH:
+        original_length = len(text)
+        truncated = text[: THREADS_MAX_LENGTH - 1]
+        # 文の区切り（。）で切れる位置を探し、なるべく不自然にならないようにする
+        last_period = truncated.rfind("。")
+        if last_period > THREADS_MAX_LENGTH * 0.5:  # 短くなりすぎない範囲でのみ採用
+            truncated = truncated[: last_period + 1]
+        text = truncated
+        print(f"文字数超過のため切り詰めました: {original_length}字 -> {len(text)}字")
+
     try:
-        threads_id = post_to_threads(data["text"])
+        threads_id = post_to_threads(text)
         doc.reference.update(
             {
                 "status": "posted",
                 "postedAt": now_utc,
                 "threadsPostId": threads_id,
+                "postedText": text,  # 実際に投稿した文章（切り詰め後）を記録
             }
         )
         print(f"投稿成功: {doc.id} -> {threads_id}")
