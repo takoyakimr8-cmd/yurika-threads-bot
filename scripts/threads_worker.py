@@ -84,8 +84,10 @@ def post_to_threads(text: str) -> str:
         },
     )
     create_data = create_res.json()
-    if not create_res.ok:
-        raise RuntimeError(f"作成失敗: {create_data}")
+    print(f"[作成ステップの生レスポンス] status={create_res.status_code} body={create_data}")
+
+    if not create_res.ok or "id" not in create_data:
+        raise RuntimeError(f"作成失敗: status={create_res.status_code} body={create_data}")
     creation_id = create_data["id"]
 
     # ステップ2：公開
@@ -97,8 +99,10 @@ def post_to_threads(text: str) -> str:
         },
     )
     publish_data = publish_res.json()
-    if not publish_res.ok:
-        raise RuntimeError(f"公開失敗: {publish_data}")
+    print(f"[公開ステップの生レスポンス] status={publish_res.status_code} body={publish_data}")
+
+    if not publish_res.ok or "id" not in publish_data:
+        raise RuntimeError(f"公開失敗: status={publish_res.status_code} body={publish_data}")
 
     return publish_data["id"]
 
