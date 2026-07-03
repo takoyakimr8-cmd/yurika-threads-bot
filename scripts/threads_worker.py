@@ -75,7 +75,7 @@ def post_to_threads(text: str) -> str:
     base = "https://graph.threads.net/v1.0"
 
     # ステップ1：投稿コンテナを作成
-    create_res = requests.get(
+    create_res = requests.post(
         f"{base}/{THREADS_USER_ID}/threads",
         params={
             "media_type": "TEXT",
