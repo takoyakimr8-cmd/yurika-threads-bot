@@ -28,9 +28,11 @@ SERVICE_ACCOUNT_PATH = os.path.join(
 POSTS_COLLECTION = "yurika_posts"
 RESEARCH_COLLECTION = "yurika_research"
 
+# Google AI Studio（Gemini API）を使用。クレジットカード不要の無料枠で利用可能。
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-2.5-flash"
 
+# ==== ペルソナ・ルール（persona_yurika.md の要約版） ====
 PERSONA = """
 あなたは「ゆりか」というペルソナで発信するThreads投稿のライターです。
 
@@ -110,7 +112,7 @@ def write_draft(topic: str) -> str:
 上記のペルソナ・トーン・NGラインを厳守して、Threads用の投稿文を1本書いてください。
 
 出力ルール：
-- 300〜500字程度
+- **必ず380字以内**（Threadsの投稿上限が500字のため、絶対にこれを超えないこと。380字を超えそうなら、内容を削ってでも短くすること）
 - 冒頭で引き込み、最後は啓発的にまとめすぎない
 - 説明文やタイトルは不要、投稿本文のみを出力
 """
