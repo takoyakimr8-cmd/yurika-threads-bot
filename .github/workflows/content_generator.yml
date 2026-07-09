@@ -2,7 +2,7 @@ name: Content Generator
 
 on:
   schedule:
-   - cron: "0 21 * * *"
+    - cron: "0 21 * * *"
     - cron: "0 1 * * *"
     - cron: "0 7 * * *"
   workflow_dispatch: {}
